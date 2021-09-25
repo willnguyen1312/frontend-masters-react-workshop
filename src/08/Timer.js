@@ -1,12 +1,12 @@
 import * as React from "react";
 import { faPlay, faPause, faStop } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useService } from "@xstate/react";
+import { useActor } from "@xstate/react";
 
 import { ProgressCircle } from "../ProgressCircle";
 
 export const Timer = ({ onDelete, onAdd, timerRef, ...attrs }) => {
-  const [state, send] = useService(timerRef);
+  const [state, send] = useActor(timerRef);
 
   const { duration, elapsed, interval } = state.context;
 

@@ -7,7 +7,7 @@ import { Clock } from "./Clock";
 import { timerAppMachine } from "./timerAppMachine.final";
 
 export const App = () => {
-  const [state, send] = useMachine(timerAppMachine);
+  const [state, send] = useMachine(timerAppMachine, { devTools: true });
   const { timers } = state.context;
 
   return (

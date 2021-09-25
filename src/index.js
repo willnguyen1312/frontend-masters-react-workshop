@@ -5,6 +5,10 @@ import App from "./Workshop";
 import { QueryClientProvider, QueryClient } from "react-query";
 import * as serviceWorker from "./serviceWorker";
 
+// import { inspect } from "@xstate/inspect";
+
+// inspect({ iframe: false });
+
 const queryClient = new QueryClient();
 
 ReactDOM.render(
