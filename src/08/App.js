@@ -26,6 +26,9 @@ export const App = () => {
           <Clock />
         </TabPanel>
         <TabPanel className="app-panel">
+          {/* <button onClick={() => send("PAUSE_FIRST_CHILDREN")}>Pause!!!</button> */}
+          <button onClick={() => send("PAUSE_ALL")}>Pause All!!!</button>
+
           <NewTimer
             onSubmit={(duration) => {
               send({ type: "ADD", duration });

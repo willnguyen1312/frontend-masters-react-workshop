@@ -1,8 +1,8 @@
-import { createMachine, assign, spawn } from 'xstate';
-import { createTimerMachine } from './timerMachine';
+import { createMachine, assign, spawn, send, actions } from "xstate";
+import { createTimerMachine } from "./timerMachine";
 
 export const timerAppMachine = createMachine({
-  initial: 'new',
+  initial: "new",
   context: {
     duration: 0,
     currentTimer: -1,
@@ -12,7 +12,7 @@ export const timerAppMachine = createMachine({
     new: {
       on: {
         CANCEL: {
-          target: 'timer',
+          target: "timer",
           cond: (ctx) => ctx.timers.length > 0,
         },
       },
@@ -29,20 +29,34 @@ export const timerAppMachine = createMachine({
               currentTimer,
             };
           }),
-          target: 'deleting',
+          target: "deleting",
         },
       },
     },
     deleting: {
       always: [
-        { target: 'new', cond: (ctx) => ctx.timers.length === 0 },
-        { target: 'timer' },
+        { target: "new", cond: (ctx) => ctx.timers.length === 0 },
+        { target: "timer" },
       ],
     },
   },
   on: {
+    PAUSE_FIRST_CHILDREN: {
+      actions: [
+        send({ type: "PAUSE" }, { to: (context) => context.timers[0] }),
+      ],
+    },
+    PAUSE_ALL: {
+      actions: [
+        actions.pure((context, event) => {
+          return context.timers.map((sampleActor) => {
+            return send("PAUSE", { to: sampleActor });
+          });
+        }),
+      ],
+    },
     ADD: {
-      target: '.timer',
+      target: ".timer",
       actions: assign((ctx, event) => {
         const newTimer = spawn(createTimerMachine(event.duration));
 
@@ -54,7 +68,7 @@ export const timerAppMachine = createMachine({
         };
       }),
     },
-    CREATE: 'new',
+    CREATE: "new",
     SWITCH: {
       actions: assign({
         currentTimer: (_, event) => event.index,

@@ -78,8 +78,6 @@ export const createTimerMachine = (duration) =>
       RESET: {
         target: ".idle",
       },
-      // ADD_PARENT: {
-      //   actions: sendParent("CREATE"),
-      // },
+      PAUSE: "paused",
     },
   });
