@@ -1,9 +1,9 @@
-import * as React from 'react';
-import { faPlay, faPause, faStop } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useService } from '@xstate/react';
+import * as React from "react";
+import { faPlay, faPause, faStop } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useService } from "@xstate/react";
 
-import { ProgressCircle } from '../ProgressCircle';
+import { ProgressCircle } from "../ProgressCircle";
 
 export const Timer = ({ onDelete, onAdd, timerRef, ...attrs }) => {
   const [state, send] = useService(timerRef);
@@ -13,12 +13,12 @@ export const Timer = ({ onDelete, onAdd, timerRef, ...attrs }) => {
   return (
     <div
       className="timer"
-      data-state={state.toStrings().join(' ')}
+      data-state={state.toStrings().join(" ")}
       style={{
         // @ts-ignore
-        '--duration': duration,
-        '--elapsed': elapsed,
-        '--interval': interval,
+        "--duration": duration,
+        "--elapsed": elapsed,
+        "--interval": interval,
       }}
       {...attrs}
     >
@@ -28,16 +28,16 @@ export const Timer = ({ onDelete, onAdd, timerRef, ...attrs }) => {
       <ProgressCircle />
       <div className="display">
         <div className="label">{state.toStrings().slice(-1)}</div>
-        <div className="elapsed" onClick={() => send('TOGGLE')}>
+        <div className="elapsed" onClick={() => send("TOGGLE")}>
           {Math.ceil(duration - elapsed)}
         </div>
         <div className="controls">
-          {!state.matches({ running: 'normal' }) && (
-            <button onClick={() => send('RESET')}>Reset</button>
+          {!state.matches({ running: "normal" }) && (
+            <button onClick={() => send("RESET")}>Reset</button>
           )}
 
-          {state.matches({ running: 'normal' }) && (
-            <button onClick={() => send('ADD_MINUTE')}>+ 1:00</button>
+          {state.matches({ running: "normal" }) && (
+            <button onClick={() => send("ADD_MINUTE")}>+ 1:00</button>
           )}
         </div>
       </div>
@@ -51,18 +51,18 @@ export const Timer = ({ onDelete, onAdd, timerRef, ...attrs }) => {
         >
           Delete
         </button>
-        {state.matches({ running: 'normal' }) && (
-          <button onClick={() => send('TOGGLE')} title="Pause timer">
+        {state.matches({ running: "normal" }) && (
+          <button onClick={() => send("TOGGLE")} title="Pause timer">
             <FontAwesomeIcon icon={faPause} />
           </button>
         )}
-        {state.matches({ running: 'overtime' }) && (
-          <button onClick={() => send('RESET')} title="Reset timer">
+        {state.matches({ running: "overtime" }) && (
+          <button onClick={() => send("RESET")} title="Reset timer">
             <FontAwesomeIcon icon={faStop} />
           </button>
         )}
-        {(state.matches('paused') || state.matches('idle')) && (
-          <button onClick={() => send('TOGGLE')} title="Start timer">
+        {(state.matches("paused") || state.matches("idle")) && (
+          <button onClick={() => send("TOGGLE")} title="Start timer">
             <FontAwesomeIcon icon={faPlay} />
           </button>
         )}
@@ -70,7 +70,8 @@ export const Timer = ({ onDelete, onAdd, timerRef, ...attrs }) => {
           className="transparent"
           title="Add timer"
           onClick={() => {
-            onAdd();
+            // onAdd();
+            send("ADD_PARENT");
           }}
         >
           Add Timer
